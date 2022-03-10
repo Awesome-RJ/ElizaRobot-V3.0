@@ -29,14 +29,12 @@ DISABLE_COMMANDS = []
 COMMANDS_LIST = []
 
 def command_lister(commands: Union[str, List[str]], disable: bool = False) -> list:
-    if isinstance(commands, str):
-        if disable:
-            DISABLE_COMMANDS.append(commands)
+    if isinstance(commands, str) and disable:
+        DISABLE_COMMANDS.append(commands)
 
-    if isinstance(commands, list):
-        if disable:
-            for command in commands:
-                DISABLE_COMMANDS.append(command)
+    if isinstance(commands, list) and disable:
+        for command in commands:
+            DISABLE_COMMANDS.append(command)
 
 def commandsHelper(commands: Union[str, List[str]]) -> list:
     if isinstance(commands, str):

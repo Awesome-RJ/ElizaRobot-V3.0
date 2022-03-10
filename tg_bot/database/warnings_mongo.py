@@ -99,11 +99,7 @@ def warn_limit(chat_id):
         }
     )
 
-    if warn_data is not None:
-        _warn_limit = warn_data['warn_limit']
-        return _warn_limit
-    else:
-        return 3
+    return warn_data['warn_limit'] if warn_data is not None else 3
 
 def count_user_warn(chat_id, user_id):
     warn_data = warnings.find_one(
@@ -116,8 +112,7 @@ def count_user_warn(chat_id, user_id):
         user_list = warn_data['warns']
         for user in user_list:
             if user_id == user['user_id']:
-                warn_count = len(user['user_warns'])
-                return warn_count
+                return len(user['user_warns'])
         
 def remove_warn(chat_id, user_id, warn_id):
     warnings.update(
@@ -181,18 +176,15 @@ def get_warn_mode(chat_id):
         warn_mode_data = warn_data['warn_mode']
         warn_mode = warn_mode_data['warn_mode']
         warn_mode_time = warn_mode_data['warn_time']
-        return (
-            warn_mode,
-            warn_mode_time
-        )
     else:
         warn_mode = 1
         warn_mode_time = None 
 
-        return (
-            warn_mode,
-            warn_mode_time
-        )
+
+    return (
+        warn_mode,
+        warn_mode_time
+    )
 
 def get_all_warn_reason(chat_id, user_id) -> list:
     warn_data = warnings.find_one(
@@ -200,9 +192,9 @@ def get_all_warn_reason(chat_id, user_id) -> list:
             'chat_id': chat_id
         }
     )
-    REASONS = []
     if warn_data is not None:
         warns = warn_data['warns']
+        REASONS = []
         for data_user_id in warns:
             if data_user_id['user_id'] == user_id:
                 user_warns = data_user_id['user_warns']

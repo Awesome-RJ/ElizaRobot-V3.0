@@ -20,13 +20,11 @@ E_MOJI="🎰"
 
 def yt_search(song):
     videosSearch = VideosSearch(song, limit=1)
-    result = videosSearch.result()
-    if not result:
-        return False
-    else:
+    if result := videosSearch.result():
         video_id = result["result"][0]["id"]
-        url = f"https://youtu.be/{video_id}"
-        return url
+        return f"https://youtu.be/{video_id}"
+    else:
+        return False
 
 
 def convert(speed):
@@ -55,7 +53,7 @@ speedtest_create = filters.create(speedtest_callback)
 async def song(client, message):
     chat_id = message.chat.id
     user_id = message.from_user["id"]
-    args = get_arg(message) + " " + "song"
+    args = f'{get_arg(message)} song'
     if args.startswith(" "):
         await message.reply("Enter a song name. Check /help")
         return ""
@@ -178,13 +176,10 @@ async def sed(c: Client, m: Message):
     exp = regex.split(r'(?<![^\\]\\)/', m.text)
     pattern = exp[1]
     replace_with = exp[2].replace(r'\/', '/')
-    flags = exp[3] if len(exp) > 3 else ''
-
-    count = 1
     rflags = 0
 
-    if 'g' in flags:
-        count = 0
+    flags = exp[3] if len(exp) > 3 else ''
+    count = 0 if 'g' in flags else 1
     if 'i' in flags and 's' in flags:
         rflags = regex.I | regex.S
     elif 'i' in flags:
@@ -262,27 +257,27 @@ async def lookup(client, message):
     response = a["success"]
     if response == True:
         date = a["results"]["last_updated"]
-        stats = f"**◢ Intellivoid• SpamProtection Info**:\n"
+        stats = "**◢ Intellivoid• SpamProtection Info**:\\n"
         stats += f' • **Updated on**: `{datetime.fromtimestamp(date).strftime("%Y-%m-%d %I:%M:%S %p")}`\n'
         stats += (
             f" • **Chat Info**: [Link](t.me/SpamProtectionBot/?start=00_{user.id})\n"
         )
 
         if a["results"]["attributes"]["is_potential_spammer"] == True:
-            stats += f" • **User**: `USERxSPAM`\n"
+            stats += " • **User**: `USERxSPAM`\\n"
         elif a["results"]["attributes"]["is_operator"] == True:
-            stats += f" • **User**: `USERxOPERATOR`\n"
+            stats += " • **User**: `USERxOPERATOR`\\n"
         elif a["results"]["attributes"]["is_agent"] == True:
-            stats += f" • **User**: `USERxAGENT`\n"
+            stats += " • **User**: `USERxAGENT`\\n"
         elif a["results"]["attributes"]["is_whitelisted"] == True:
-            stats += f" • **User**: `USERxWHITELISTED`\n"
+            stats += " • **User**: `USERxWHITELISTED`\\n"
 
         stats += f' • **Type**: `{a["results"]["entity_type"]}`\n'
         stats += (
             f' • **Language**: `{a["results"]["language_prediction"]["language"]}`\n'
         )
         stats += f' • **Language Probability**: `{a["results"]["language_prediction"]["probability"]}`\n'
-        stats += f"**Spam Prediction**:\n"
+        stats += "**Spam Prediction**:\\n"
         stats += f' • **Ham Prediction**: `{a["results"]["spam_prediction"]["ham_prediction"]}`\n'
         stats += f' • **Spam Prediction**: `{a["results"]["spam_prediction"]["spam_prediction"]}`\n'
         stats += f'**Blacklisted**: `{a["results"]["attributes"]["is_blacklisted"]}`\n'

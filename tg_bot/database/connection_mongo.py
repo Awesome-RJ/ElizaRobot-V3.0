@@ -62,11 +62,7 @@ def GetConnectedChat(user_id):
             'user_id': user_id
         }
     )
-    if connectionData is not None:
-        chat_id = connectionData['connected_chat']
-        return chat_id 
-    else:
-        return None
+    return connectionData['connected_chat'] if connectionData is not None else None
 
 def isChatConnected(user_id) -> bool:
     connectionData = connection.find_one(
@@ -74,10 +70,7 @@ def isChatConnected(user_id) -> bool:
             'user_id': user_id
         }
     )
-    if connectionData is not None:
-        return connectionData['connection']
-    else:
-        return False
+    return connectionData['connection'] if connectionData is not None else False
 
 def disconnectChat(user_id):
     connection.update_one(
@@ -109,7 +102,7 @@ def allow_collection(chat_id, chat_title, allow_collection):
             'chat_id': chat_id
         }
     )
-    if chat_data == None:
+    if chat_data is None:
         ChatsNums = chats.count_documents({})
         ChatsIDs = ChatsNums + 1
 
@@ -120,7 +113,7 @@ def allow_collection(chat_id, chat_title, allow_collection):
             'first_found_date': first_found_date,
             'allow_collection': allow_collection
             }
-        
+
         chats.insert_one(
             ChatData
         )

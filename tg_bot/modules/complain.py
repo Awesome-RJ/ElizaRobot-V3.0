@@ -14,15 +14,15 @@ def complain(bot: Bot, update: Update):
   message = update.effective_message
   userid=message.from_user.id
   text = message.text[len('/complain '):]
-   
+
 
   com_text = f"αℓℓυкα's *New* feedback from [{name}](tg://user?id={userid})\n\nfeed: {text}"
-  
+
 
   bot.send_message(-1001473433393, com_text, parse_mode=ParseMode.MARKDOWN)
- 
+
   text = html.escape(text)
-  reply_text=f"Thankyou for giving ums your feedback."
+  reply_text = "Thankyou for giving ums your feedback."
   message.reply_text(reply_text, reply_markup=InlineKeyboardMarkup(
                                                 [[InlineKeyboardButton(text="You can see your feedback here",url="https://telegram.dog/allukabotfeeds")]]))
                                                

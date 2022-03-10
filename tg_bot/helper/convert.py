@@ -20,19 +20,18 @@ import math
 
 def convert_time(given_time: int, time_format: str):
     week = 518400 # 518400 seconds in a week
-    day = 86400 # 86400 seconds in a day
     hour = 3600 # 3600 seconds in a hour
     minute = 60 # 60 seconds in a minute
 
-    if time_format == 'w':
-        cal_time = given_time * week 
-    elif time_format == 'd':
-        cal_time = given_time * day 
+    if time_format == 'd':
+        cal_time = given_time * 86400
     elif time_format == 'h':
         cal_time = given_time * hour
     elif time_format == 'm':
         cal_time = given_time * minute
-    
+
+    elif time_format == 'w':
+        cal_time = given_time * week
     return cal_time
 
 def convert_size(size_bytes):

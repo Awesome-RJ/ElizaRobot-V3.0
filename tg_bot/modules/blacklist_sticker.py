@@ -27,8 +27,7 @@ def blackliststicker(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
     bot, args = context.bot, context.args
-    conn = connected(bot, update, chat, user.id, need_admin=False)
-    if conn:
+    if conn := connected(bot, update, chat, user.id, need_admin=False):
         chat_id = conn
         chat_name = dispatcher.bot.getChat(conn).title
     else:
@@ -71,8 +70,7 @@ def add_blackliststicker(update, context):
     user = update.effective_user  # type: Optional[User]
     words = msg.text.split(None, 1)
     bot = context.bot
-    conn = connected(bot, update, chat, user.id)
-    if conn:
+    if conn := connected(bot, update, chat, user.id):
         chat_id = conn
         chat_name = dispatcher.bot.getChat(conn).title
     else:
@@ -152,8 +150,7 @@ def unblackliststicker(update, context):
     user = update.effective_user  # type: Optional[User]
     words = msg.text.split(None, 1)
     bot = context.bot
-    conn = connected(bot, update, chat, user.id)
-    if conn:
+    if conn := connected(bot, update, chat, user.id):
         chat_id = conn
         chat_name = dispatcher.bot.getChat(conn).title
     else:
@@ -252,11 +249,10 @@ def blacklist_mode(update, context):
         chat_name = update.effective_message.chat.title
 
     if args:
-        if args[0].lower() == 'off' or args[0].lower(
-        ) == 'nothing' or args[0].lower() == 'no':
+        if args[0].lower() in ['off', 'nothing', 'no']:
             settypeblacklist = 'turn off'
             sql.set_blacklist_strength(chat_id, 0, "0")
-        elif args[0].lower() == 'del' or args[0].lower() == 'delete':
+        elif args[0].lower() in ['del', 'delete']:
             settypeblacklist = 'left, the message will be deleted'
             sql.set_blacklist_strength(chat_id, 1, "0")
         elif args[0].lower() == 'warn':
@@ -301,11 +297,16 @@ def blacklist_mode(update, context):
             text = "Blacklist sticker mode changed, users will be `{}`!".format(
                 settypeblacklist)
         send_message(update.effective_message, text, parse_mode="markdown")
-        log_message = "<b>{}:</b>\n" \
-              "<b>Admin:</b> {}\n" \
-              "Changed sticker blacklist mode. users will be {}.".format(html.escape(chat.title),
-                         mention_html(user.id, user.first_name), settypeblacklist)
-        return log_message
+        return (
+            "<b>{}:</b>\n"
+            "<b>Admin:</b> {}\n"
+            "Changed sticker blacklist mode. users will be {}.".format(
+                html.escape(chat.title),
+                mention_html(user.id, user.first_name),
+                settypeblacklist,
+            )
+        )
+
     getmode, getvalue = sql.get_blacklist_setting(chat.id)
     if getmode == 0:
         settypeblacklist = "not active"
@@ -346,7 +347,7 @@ def del_blackliststicker(update, context):
         return
 
 
-    chat_id = str(chat.id)[1:] 
+    chat_id = str(chat.id)[1:]
     approve_list = list(REDIS.sunion(f'approve_list_{chat_id}'))
     target_user = mention_html(user.id, user.first_name)
     if target_user in approve_list:
@@ -440,9 +441,7 @@ def del_blackliststicker(update, context):
                         parse_mode="markdown")
                     return
             except BadRequest as excp:
-                if excp.message == "Message to delete not found":
-                    pass
-                else:
+                if excp.message != "Message to delete not found":
                     LOGGER.exception("Error while deleting blacklist message.")
                 break
 

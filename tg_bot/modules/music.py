@@ -34,9 +34,8 @@ try:
    from youtubesearchpython import SearchVideos 
 
 except:
-	os.system("pip install pip install youtube-search-python")
-	from youtubesearchpython import SearchVideos 
-	pass
+   os.system("pip install pip install youtube-search-python")
+   from youtubesearchpython import SearchVideos
 
 @eliza(pattern="^/song (.*)")
 async def download_video(v_url):

@@ -8,15 +8,9 @@ from PIL import Image, ImageDraw, ImageFont
 @register(pattern="^/logo ?(.*)")
 async def lego(event):
  quew = event.pattern_match.group(1)
- if event.sender_id == OWNER_ID:
-     pass
- else:
-     
-    if not quew:
-       await event.reply('Provide Some Text To Draw!')
-       return
-    else:
-       pass
+ if event.sender_id != OWNER_ID and not quew:
+  await event.reply('Provide Some Text To Draw!')
+  return
  await event.reply('Creating your logo...wait!')
  try:
     text = event.pattern_match.group(1)
@@ -48,15 +42,9 @@ async def lego(event):
 @register(pattern="^/wlogo ?(.*)")
 async def lego(event):
  quew = event.pattern_match.group(1)
- if event.sender_id == OWNER_ID:
-     pass
- else:
-     
-    if not quew:
-       await event.reply('Provide Some Text To Draw!')
-       return
-    else:
-       pass
+ if event.sender_id != OWNER_ID and not quew:
+  await event.reply('Provide Some Text To Draw!')
+  return
  await event.reply('Creating your logo...wait!')
  try:
     text = event.pattern_match.group(1)

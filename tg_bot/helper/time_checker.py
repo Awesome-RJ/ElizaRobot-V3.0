@@ -19,9 +19,7 @@
 from tg_bot.helper.convert import convert_time
 
 async def get_time(message):
-    if(
-        message.reply_to_message
-    ):
+    if message.reply_to_message:
         if not (
             len(message.command) >= 2
         ):
@@ -31,30 +29,23 @@ async def get_time(message):
             return
 
         args = message.command[1]
-        if await check_time(message, args):
-            return args
-        
-    elif not (
-        message.reply_to_message
-    ):
-        if not len(message.command) >= 3:
+    else:
+        if len(message.command) < 3:
             await message.reply(
                 "You haven't specified a time to mute this user for!"
             )
             return
 
         args = message.command[2]
-        if await check_time(message, args):
-            return args
+    if await check_time(message, args):
+        return args
             
 
 async def check_time(message, args) -> bool:
     if len(args) == 0:
-        await message.reply(
-            f"failed to get specified time: You didn't provide me time"
-        )
+        await message.reply("failed to get specified time: You didn't provide me time")
         return
-        
+
     if (
         len(args) == 1
     ):

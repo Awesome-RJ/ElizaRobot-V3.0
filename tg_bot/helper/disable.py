@@ -35,9 +35,7 @@ def disable(func):
                     if not await isBotCan(message, permissions='can_delete_messages'):
                         return
                     await message.delete()
-                    return
-                else:
-                    return
+                return
             else:
                 await func(client, message)
         else:
